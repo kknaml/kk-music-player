@@ -4,8 +4,7 @@ file(GLOB_RECURSE MODULE_FILES src/**.ixx)
 
 add_executable(kk-emm ${SOURCE_FILES})
 
-# target_include_directories(kk-emm PUBLIC include /home/rainy/project/kk-emm/third_party/SDL2/include)
-
+target_include_directories(kk-emm PUBLIC include)
 #target_sources(
 #        kk-emm
 #        PUBLIC
