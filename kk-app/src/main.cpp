@@ -1,9 +1,14 @@
+#if defined(_WIN32)
+  #define  SDL_MAIN_HANDLED
+#endif
+
 
 #include <SDL.h>
 #include <SDL_vulkan.h>
 #include <imgui.h>
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_vulkan.h>
+#include <cstdio>
 #include <print>
 
 //#define APP_USE_UNLIMITED_FRAME_RATE

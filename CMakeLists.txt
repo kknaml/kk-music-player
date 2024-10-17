@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.29)
+cmake_minimum_required(VERSION 3.27)
 project(kk-emm)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 26)
 
 set(SDL_LIBRARY /third_party/SDL2/src)
 set(SDL_INCLUDE_DIR /third_party/SDL2/include)

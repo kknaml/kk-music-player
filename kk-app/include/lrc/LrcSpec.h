@@ -9,12 +9,24 @@
 #include "LrcTag.h"
 #include "Lyrics.h"
 
-namespace kmp {
+namespace kmp::lrc {
     class LrcSpec {
     public:
-        std::vector<LrcTag> tags;
-        std::vector<Lyrics> lyrics;
+        LrcSpec(std::vector<LrcTag> tags, std::vector<Lyrics> lyrics) : mTags(std::move(tags)), mLyrics(std::move(lyrics)) {
+        }
+
+        LrcSpec(const LrcSpec &other) = default;
+
+        LrcSpec(LrcSpec &&other) noexcept = default;
+
+        LrcSpec &operator=(const LrcSpec &other) = default;
+
+        LrcSpec &operator=(LrcSpec &&other) = default;
+
+    private:
+        std::vector<LrcTag> mTags;
+        std::vector<Lyrics> mLyrics;
     };
-} // kmp
+} // kmp::lrc
 
 #endif //LRCSPEC_H

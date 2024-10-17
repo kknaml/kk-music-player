@@ -2,6 +2,8 @@
 file(GLOB_RECURSE SOURCE_FILES src/**.cpp)
 file(GLOB_RECURSE MODULE_FILES src/**.ixx)
 
+set(CMAKE_CXX_STANDARD 26)
+
 add_executable(kk-emm ${SOURCE_FILES})
 
 target_include_directories(kk-emm PUBLIC include)

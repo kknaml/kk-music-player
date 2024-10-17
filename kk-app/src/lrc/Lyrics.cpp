@@ -4,5 +4,7 @@
 
 #include <lrc/Lyrics.h>
 
-namespace kmp {
-} // kmp
+namespace kmp::lrc {
+
+
+} // kmp::lrc

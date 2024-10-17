@@ -6,102 +6,140 @@
 #define LRCTAG_H
 #include <sstream>
 #include <string>
+#include <array>
+#include <utility>
+#include <vector>
 
-namespace kmp {
-    enum LrcTagEnum {
-        TI,
-        AR,
-        AL,
-        AU,
-        LENGTH,
-        BY,
-        OFFSET,
-        RE,
-        TOOL,
-        VE,
-        COMMENTS,
-        TAG_COUNT
-    };
-    const std::array<std::string, TAG_COUNT> lrcTagStrings = {
-        "ti", "ar", "al", "au", "length",
-        "by", "offset", "re", "tool", "ve", "#"
-    };
+namespace kmp::lrc {
+
+    constexpr char TAG_TI[] = "ti";
+    constexpr char TAG_AR[] = "ar";
+    constexpr char TAG_AL[] = "al";
+    constexpr char TAG_AU[] = "au";
+    constexpr char TAG_LENGTH[] = "length";
+    constexpr char TAG_BY[] = "by";
+    constexpr char TAG_OFFSET[] = "offset";
+    constexpr char TAG_RE[] = "re";
+    constexpr char TAG_TOOL[] = "tool";
+    constexpr char TAG_VE[] = "ve";
+    constexpr char TAG_COMMENTS[] = "#";
+
 
     class LrcTag {
     public:
-        LrcTagEnum tag;
-        std::string_view tagName;
-        std::string value;
-        LrcTag(const LrcTagEnum tag, const std::string &value) {
-            this->tag = tag;
-            this->tagName = lrcTagStrings[tag];
-            this->value = value;
+        LrcTag(std::string_view tagName, std::string value): mTagName(tagName), mValue(std::move(value)) {
+        }
+
+        LrcTag(const LrcTag &other) = default;
+
+        LrcTag(LrcTag &&other) noexcept;
+
+        LrcTag &operator=(const LrcTag &other) = default;
+        LrcTag &operator=(LrcTag &&other) noexcept;
+
+        [[nodiscard]] std::string_view getTagName() const {
+            return mTagName;
+        }
+
+        [[nodiscard]] const std::string &getValue() const {
+            return mValue;
+        }
+
+
+    private:
+        std::string_view mTagName;
+        std::string mValue;
+
+    public:
+        static LrcTag ti(std::string value) {
+            return {TAG_TI, std::move(value)};
+        }
+
+        static LrcTag ar(std::string value) {
+            return {TAG_AR, std::move(value)};
+        }
+
+        static LrcTag al(std::string value) {
+            return {TAG_AL, std::move(value)};
+        }
+
+        static LrcTag au(std::string value) {
+            return {TAG_AU, std::move(value)};
+        }
+
+        static LrcTag length(std::string value) {
+            return {TAG_LENGTH, std::move(value)};
+        }
+
+        static LrcTag by(std::string value) {
+            return {TAG_BY, std::move(value)};
+        }
+
+        static LrcTag offset(std::string value) {
+            return {TAG_OFFSET, std::move(value)};
+        }
+
+        static LrcTag re(std::string value) {
+            return {TAG_RE, std::move(value)};
+        }
+
+        static LrcTag tool(std::string value) {
+            return {TAG_TOOL, std::move(value)};
+        }
+
+        static LrcTag ve(std::string value) {
+            return {TAG_VE, std::move(value)};
+        }
+
+        static LrcTag comments(std::string value) {
+            return {TAG_COMMENTS, std::move(value)};
+        }
+
+        static bool isTi(const LrcTag &tag) {
+            return tag.getTagName() == TAG_TI;
+        }
+
+        static bool isAr(const LrcTag &tag) {
+            return tag.getTagName() == TAG_AR;
+        }
+
+        static bool isAl(const LrcTag &tag) {
+            return tag.getTagName() == TAG_AL;
+        }
+
+        static bool isAu(const LrcTag &tag) {
+            return tag.getTagName() == TAG_AU;
+        }
+
+        static bool isLength(const LrcTag &tag) {
+            return tag.getTagName() == TAG_LENGTH;
+        }
+
+        static bool isBy(const LrcTag &tag) {
+            return tag.getTagName() == TAG_BY;
+        }
+
+        static bool isOffset(const LrcTag &tag) {
+            return tag.getTagName() == TAG_OFFSET;
+        }
+
+        static bool isRe(const LrcTag &tag) {
+            return tag.getTagName() == TAG_RE;
+        }
+
+        static bool isTool(const LrcTag &tag) {
+            return tag.getTagName() == TAG_TOOL;
+        }
+
+        static bool isVe(const LrcTag &tag) {
+            return tag.getTagName() == TAG_VE;
+        }
+
+        static bool isComments(const LrcTag &tag) {
+            return tag.getTagName() == TAG_COMMENTS;
         }
     };
 
-    class Ti : public LrcTag {
-    public:
-        explicit Ti(const std::string &value): LrcTag(TI, value) {
-        }
-    };
-    class Ar : public LrcTag {
-    public:
-        explicit Ar(const std::string &value): LrcTag(AR, value) {
-        }
-    };
-    class Al : public LrcTag {
-    public:
-        explicit Al(const std::string &value): LrcTag(AL, value) {
-        }
-    };
-    class Au : public LrcTag {
-    public:
-        explicit Au(const std::string &value): LrcTag(AU, value) {
-        }
-    };
-    class Length : public LrcTag {
-    public:
-        int lenInMils = 0;
-        explicit Length(const std::string &value): LrcTag(LENGTH, value) {
-            std::stringstream ss(value);
-            std::string item;
-            std::vector<int> parts;
-            while (std::getline(ss,item,':')) {
-                parts.push_back(std::stoi(item));
-            }
-            lenInMils = parts[0]*60*1000+parts[1]*1000;
-        }
-    };
-    class By : public LrcTag {
-    public:
-        explicit By(const std::string &value): LrcTag(BY, value) {
-        }
-    };
-    class Offset : public LrcTag {
-    public:
-        explicit Offset(const std::string &value): LrcTag(OFFSET, value) {
-        }
-    };
-    class Re : public LrcTag {
-    public:
-        explicit Re(const std::string &value): LrcTag(RE, value) {
-        }
-    };
-    class Tool : public LrcTag {
-    public:
-        explicit Tool(const std::string &value): LrcTag(TOOL, value) {
-        }
-    };
-    class Ve : public LrcTag {
-    public:
-        explicit Ve(const std::string &value): LrcTag(VE, value) {
-        }
-    };
-    class Comments : public LrcTag {
-    public:
-        explicit Comments(const std::string &value): LrcTag(COMMENTS, value) {
-        }
-    };
-} // kmp
+} // kmp::lrc
 
 #endif //LRCTAG_H
