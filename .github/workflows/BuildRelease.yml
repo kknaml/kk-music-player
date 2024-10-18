@@ -11,10 +11,6 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-        with:
-          submodules: 'true'
 
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v2
@@ -23,7 +19,13 @@ jobs:
 
       - name: Set up MSVC environment
         run: |
-          cmd.exe /c "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcvarsall.bat" x64
+          $env:VSINSTALLDIR = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise"
+          $env:PATH = "$env:VSINSTALLDIR\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64;$env:PATH"
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: 'true'
 
       - name: Install Vulkan SDK
         uses: jakoch/install-vulkan-sdk-action@v1.0.0
