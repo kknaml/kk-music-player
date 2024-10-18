@@ -23,7 +23,7 @@ jobs:
 
       - name: Set up MSVC environment
         run: |
-          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcvarsall.bat" x64
+          cmd.exe /c "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcvarsall.bat" x64
 
       - name: Install Vulkan SDK
         uses: jakoch/install-vulkan-sdk-action@v1.0.0
