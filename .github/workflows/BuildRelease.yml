@@ -38,11 +38,8 @@ jobs:
 #          ./bootstrap-vcpkg.sh
       - name: Install Ninja
         uses: turtlesec-no/get-ninja@main
-#      - name: debugger
-#        uses: csexton/debugger-action@master
-#      - name: Install dependencies
-#        run: |
-#          ./vcpkg/vcpkg install --x-manifest-root=.
+
+
       - name: Configure CMake
         run: |
           mkdir build
