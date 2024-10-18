@@ -12,14 +12,16 @@ jobs:
       contents: read
     steps:
 
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v2
-        with:
-          msbuild-architecture: x64
+      - uses: ilammy/msvc-dev-cmd@v1
+#      - name: Add msbuild to PATH
+#        uses: microsoft/setup-msbuild@v2
+#        with:
+#          msbuild-architecture: x64
+#          vs-version: '16.4'
 
-      - name: Compile Visual Studio project with MSBuild
-        shell: cmd
-        run: ${{ '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat"' }}
+#      - name: Compile Visual Studio project with MSBuild
+#        shell: cmd
+#        run: ${{ '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat"' }}
 
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -44,12 +46,10 @@ jobs:
       - name: Configure CMake
         run: |
           mkdir build
-          ${{ '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat"' }}
           cmake -DCMAKE_BUILD_TYPE=RELEASE -G Ninja -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -S . -B build
       - name: Build with Ninja
         run: |
           cd build
-          ${{ '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat"' }}
           ninja
 #      - name: Create Release
 #        id: create_release
