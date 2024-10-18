@@ -2,6 +2,7 @@
 
 #include <imgui_impl_vulkan.h>
 #include <kmp_common.hpp>
+#include <music_player.hpp>
 #include <SDL_video.h>
 
 namespace kmp {
@@ -24,6 +25,8 @@ namespace kmp {
         ImVec4 mClearColor{0.45f, 0.55f, 0.60f, 1.00f};
         bool mShowDemoWindow{true};
         bool mShowAnotherWindow{false};
+
+        MusicPlayer mMusicPlayer{};
     };
 
 } // namespace kmp

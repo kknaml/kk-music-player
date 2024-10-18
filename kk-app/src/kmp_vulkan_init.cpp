@@ -263,7 +263,7 @@ namespace kmp {
 
     void kmpInitVulkan(KmpApp &app) {
         // Setup SDL
-        if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
+        if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
             printf("Error: %s\n", SDL_GetError());
             throw std::runtime_error("Failed to initialize SDL");
         }

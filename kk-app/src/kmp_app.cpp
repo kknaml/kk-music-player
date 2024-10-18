@@ -1,13 +1,59 @@
+#define SDL_HINT_WAVE_CHUNK_LIMIT 1000000000
 #include <kmp_app.hpp>
 #include <SDL.h>
 #include <SDL_vulkan.h>
+
 #include <imgui.h>
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_vulkan.h>
 #include <print>
 #include <kmp_vulkan_init.hpp>
+#include <ui/MusicWindow.hpp>
+#include <iostream>
+#include <fstream>
+
 
 namespace kmp {
+
+
+    struct WavHeader {
+        char riff[4];
+        unsigned int overall_size;
+        char wave[4];
+        char fmt[4];
+        unsigned int fmt_size;
+        unsigned short format_type;
+        unsigned short channels;
+        unsigned int sample_rate;
+        unsigned int byterate;
+        unsigned short block_align;
+        unsigned short bits_per_sample;
+        char data[4];
+        unsigned int data_size;
+    };
+
+    bool loadWAV(const char* filename, WavHeader& header, std::vector<char>& audioData) {
+        std::ifstream file(filename, std::ios::binary);
+        if (!file) {
+            std::cerr << "Failed to open WAV file." << std::endl;
+            return false;
+        }
+
+        // 读取 WAV 文件头
+        file.read(reinterpret_cast<char*>(&header), sizeof(WavHeader));
+        if (header.riff[0] != 'R' || header.riff[1] != 'I' || header.riff[2] != 'F' || header.riff[3] != 'F') {
+            std::cerr << "Not a valid WAV file!" << std::endl;
+            return false;
+        }
+
+        // 读取音频数据
+        size_t size = header.overall_size - sizeof(WavHeader);
+        audioData.resize(size);
+        file.read(audioData.data(), size);
+        file.close();
+        return true;
+    }
+
     extern void kmpInitVulkan(KmpApp &app);
 
     static void FrameRender(ImGui_ImplVulkanH_Window *wd, ImDrawData *draw_data) {
@@ -98,7 +144,43 @@ namespace kmp {
     }
 
     void KmpApp::start() {
+
+
+
+        // mMusicPlayer.load("x97gp-807lu.wav");
+
+        WavHeader header{};
+        std::vector<char> audioData;
+        if (!loadWAV("x97gp-807lu.wav", header, audioData)) {
+            std::println(stderr, "Failed to load WAV file");
+        }
+
+        SDL_AudioSpec spec{};
+        spec.freq = header.sample_rate;
+        spec.format = AUDIO_S16SYS;
+        spec.channels = header.channels;
+        spec.silence = 0;
+        spec.samples = audioData.size() / header.channels / (header.bits_per_sample / 8);
+        spec.callback = [](void *userdata, Uint8 *stream, int len) {
+            auto *audioData = static_cast<std::vector<char> *>(userdata);
+            if (audioData->empty()) {
+                return;
+            }
+            int amount = std::min(len, static_cast<int>(audioData->size()));
+            std::memcpy(stream, audioData->data(), amount);
+            audioData->erase(audioData->begin(), audioData->begin() + amount);
+        };
+        spec.userdata = &audioData;
+        if (SDL_OpenAudio(&spec, nullptr) < 0) {
+            std::cerr << "Failed to open audio device" << std::endl;
+            std::println("{}", SDL_GetError());
+            return;
+        }
+        SDL_PauseAudio(0);
+
         while (!mDone) {
+
+
             // Poll and handle events (inputs, window resize, etc.)
             // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
             // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
@@ -184,6 +266,9 @@ namespace kmp {
             ImGui::End();
         }
 
+        bool active = true;
+        ui::musicWindow(active, this->mMusicPlayer);
+
         // Rendering
         ImGui::Render();
         ImDrawData *draw_data = ImGui::GetDrawData();
@@ -196,6 +281,7 @@ namespace kmp {
             FrameRender(this->mWd, draw_data);
             FramePresent(this->mWd);
         }
+
     }
 
     void KmpApp::onClose() {
