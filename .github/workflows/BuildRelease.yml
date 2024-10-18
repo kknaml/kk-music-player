@@ -17,6 +17,9 @@ jobs:
         with:
           msbuild-architecture: x64
 
+      - name: Compile Visual Studio project with MSBuild
+        shell: cmd
+        run: ${{ '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat"' }
 
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -41,7 +44,7 @@ jobs:
       - name: Configure CMake
         run: |
           mkdir build
-          cmake -DCMAKE_BUILD_TYPE=RELEASE -G Ninja -S . -B build
+          cmake -DCMAKE_BUILD_TYPE=RELEASE -G Ninja -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -S . -B build
       - name: Build with Ninja
         run: |
           cd build
