@@ -17,10 +17,6 @@ jobs:
         with:
           msbuild-architecture: x64
 
-      - name: Set up MSVC environment
-        run: |
-          $env:VSINSTALLDIR = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise"
-          $env:PATH = "$env:VSINSTALLDIR\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64;$env:PATH"
 
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -50,7 +46,8 @@ jobs:
       - name: Configure CMake
         run: |
           mkdir build
-          cmake -DCMAKE_BUILD_TYPE=RELEASE -G Ninja -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -S . -B build
+        # cmake -DCMAKE_BUILD_TYPE=RELEASE -G Ninja -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -S . -B build
+          cmake -DCMAKE_BUILD_TYPE=RELEASE -G Ninja -S . -B build
       - name: Build with Ninja
         run: |
           cd build
