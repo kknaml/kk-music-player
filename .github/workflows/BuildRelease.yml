@@ -43,7 +43,7 @@ jobs:
       - name: Configure CMake
         run: |
           mkdir build
-        # cmake -DCMAKE_BUILD_TYPE=RELEASE -G Ninja -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -S . -B build
+# cmake -DCMAKE_BUILD_TYPE=RELEASE -G Ninja -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -S . -B build
           cmake -DCMAKE_BUILD_TYPE=RELEASE -G Ninja -S . -B build
       - name: Build with Ninja
         run: |
