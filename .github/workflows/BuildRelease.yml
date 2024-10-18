@@ -43,15 +43,13 @@ jobs:
         uses: turtlesec-no/get-ninja@main
       - name: Configure CMake
         run: |
-          shell: cmd
-          run: ${{ '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat"' }}
           mkdir build
+          ${{ '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat"' }}
           cmake -DCMAKE_BUILD_TYPE=RELEASE -G Ninja -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -S . -B build
       - name: Build with Ninja
         run: |
           cd build
-          shell: cmd
-          run: ${{ '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat"' }}
+          ${{ '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat"' }}
           ninja
 #      - name: Create Release
 #        id: create_release
