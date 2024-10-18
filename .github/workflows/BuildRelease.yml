@@ -25,6 +25,14 @@ jobs:
           version: 1.3.204.1
           cache: true
 
+      - name: Install Vulkan SDK
+        uses: jakoch/install-vulkan-sdk-action@v1.0.0
+        with:
+          vulkan_version: 1.3.231.1
+          install_runtime: true
+          cache: true
+          stripdown: true
+
 #      - name: Set up vcpkg
 #        run: |
 #          git clone https://github.com/microsoft/vcpkg.git
@@ -34,9 +42,9 @@ jobs:
         uses: turtlesec-no/get-ninja@main
 #      - name: debugger
 #        uses: csexton/debugger-action@master
-      - name: Install dependencies
-        run: |
-          ./vcpkg/vcpkg install --x-manifest-root=.
+#      - name: Install dependencies
+#        run: |
+#          ./vcpkg/vcpkg install --x-manifest-root=.
       - name: Configure CMake
         run: |
           mkdir build
