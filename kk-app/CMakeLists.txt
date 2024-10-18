@@ -5,7 +5,6 @@ file(GLOB_RECURSE MODULE_FILES src/**.ixx)
 set(CMAKE_CXX_STANDARD 26)
 
 add_executable(kk-emm ${SOURCE_FILES})
-find_package(OpenAL REQUIRED)
 
 target_include_directories(kk-emm PUBLIC include)
 #target_sources(
@@ -17,6 +16,6 @@ target_include_directories(kk-emm PUBLIC include)
 #)
 
 # find_package(IMGUI CONFIG)
-target_link_libraries(kk-emm PUBLIC IMGUI OpenAL::OpenAL)
+target_link_libraries(kk-emm PUBLIC IMGUI)
 # target_include_directories(kk-emm PUBLIC ${SDL_INCLUDE_DIR})
 
